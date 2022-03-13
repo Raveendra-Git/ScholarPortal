@@ -1,0 +1,500 @@
+﻿
+@{
+    ViewBag.Title = "Exam Portal";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<style>
+    button.mdi{
+        font-size:25px;
+    }
+    .active {
+        background-color: blueviolet !important;
+        color: white !important;
+    }
+
+    .saved {
+        background-color: green !important;
+        /*pointer-events: none;*/
+        color: white !important;
+    }
+
+    #time {
+        font-size: 46px;
+        font-weight: bold;
+        vertical-align: super;
+        color: white;
+    }
+
+    .p-5 {
+        padding: 15px 9px 0 9px;
+        border-bottom: 2px solid black;
+        background-color: #1DA;
+    }
+
+    .clsborder {
+        border: 2px solid gray;
+        margin-left: 35px;
+    }
+
+    .btn-lg {
+        width: 18%;
+    }
+
+    .btnleft {
+        margin-left: 12%;
+        margin-right: 10%;
+    }
+
+    .btnmiddle {
+        margin-right: 12%;
+    }
+
+    .btnrows {
+        padding: 4% 0% 4% 0%;
+    }
+
+    #lblQuestion {
+        padding: 10px;
+    }
+
+    input[name="Option"] {
+        margin-left: 5px;
+    }
+
+    .btn-primary {
+        background-color: white;
+        color: black;
+        font-weight: 800;
+        border: 5px solid lightgray;
+        cursor: pointer;
+    }
+
+    .txtblinker {
+        animation: blinker 2s linear infinite;
+        font-family: "Times New Roman", Times, serif;
+    }
+
+        .txtblinker:hover {
+            animation: paused;
+        }
+
+    @@keyframes blinker {
+        50% {
+            opacity: 0;
+            /*color:white;*/
+        }
+
+        100% {
+            color: white;
+        }
+    }
+
+    #lblParticipant {
+        background-color: snow;
+        font-weight: 700;
+        padding: 5px;
+        border: 2px solid blue;
+    }
+</style>
+<link href="~/Content/toast.css" rel="stylesheet" />
+
+<h2>Exam Portal</h2>
+
+    <button class="mdi mdi-printer btn btn-success" onclick="fnPrintAll();"></button>
+    <button class="mdi mdi-file-pdf btn btn-danger" onclick="fnDirectPrint();"></button>
+
+<div class="container-fluid">
+    @*  <form id="form-Questions" method="post"> *@
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <div class="row p-5">
+                        <div class="col-sm-4 form-group">
+                            <label>Welcome : <span id="lblParticipant"></span></label>
+                        </div>
+
+                        <div class="col-sm-4 form-group">
+                            <div class="col-sm-4">
+                                <label>Choose Subject : </label>
+                            </div>
+                            <div class="col-sm-8">
+                                <select id="ddlSubject" class="form-control">
+                                    <option value="0">Select</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            @*<label>Start : </label>*@
+                            <input type="image" src="~/Images/start_btn.png" id="imgStat" alt="Submit" width="48" height="48" title="Start the Exam" onclick="btnStartExam();" />
+                            <div style="display:inline-block;" class="txtblinker hide">
+                                <input type="image" src="~/Images/time.jpg" width="48" height="48" style="margin-left: 96px;" title="Start the Exam" />
+                                <span id="time"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row wizard-content">
+                        <div class="col-sm-7 clsborder well well-lg">
+                            <div class="row">
+
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th style="width:11%;"></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label>Question </label>
+                                                    <input type="hidden" id="lblQueNum" value="" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <textarea type="text" id="lblQuestion" rows="5" cols="110" readonly></textarea>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionA">Option A</label>
+                                                    <input type="radio" name="Option" value="1" id="txtOptionA" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionA" id="lblOptionA"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionB">Option B</label>
+                                                    <input type="radio" name="Option" value="2" id="txtOptionB" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionB" id="lblOptionB"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionC">Option C</label>
+                                                    <input type="radio" name="Option" value="3" id="txtOptionC" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionC" id="lblOptionC"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionD">Option D</label>
+                                                    <input type="radio" name="Option" value="4" id="txtOptionD" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label for="txtOptionD" id="lblOptionD"></label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input type="button" id="btnPrevious" onclick="fnPrevious();" class="form-control" name="name" value=" < Previous" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="button" id="btnSave" onclick="fnSave();" class="form-control" name="name" value="Save" />
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="button" id="btnNext" onclick="fnNext();" class="form-control" name="name" value="Next >  " />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 clsborder well well-lg">
+                            <div class="row form-group btnrows">
+                                <button class="btn btn-lg btn-primary btnleft btnQues" id="btnQuestion1">1</button>
+                                <button class="btn btn-lg btn-primary btnmiddle btnQues" id="btnQuestion2">2</button>
+                                <button class="btn btn-lg btn-primary btnright btnQues " id="btnQuestion3">3</button>
+                            </div>
+                            <div class="row form-group btnrows">
+                                <button class="btn btn-lg btn-primary btnleft btnQues" id="btnQuestion4">4</button>
+                                <button class="btn btn-lg btn-primary btnmiddle btnQues" id="btnQuestion5">5</button>
+                                <button class="btn btn-lg btn-primary btnright btnQues" id="btnQuestion6">6</button>
+                            </div>
+                            <div class="row form-group btnrows">
+                                <button class="btn btn-lg btn-primary btnleft btnQues" id="btnQuestion7">7</button>
+                                <button class="btn btn-lg btn-primary btnmiddle btnQues" id="btnQuestion8">8</button>
+                                <button class="btn btn-lg btn-primary btnright btnQues" id="btnQuestion9">9</button>
+                            </div>
+                            <div class="row form-group btnrows">
+                                <button class="btn btn-lg btn-primary btnleft btnQues" id="btnQuestion10">10</button>
+                                <button class="btn btn-lg btn-success btnmiddle" style="width:47%;" id="btnSubmit" onclick="fnSubmitTest();">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*</form>*@
+</div>
+<input type="hidden" name="name" id="hidQuestion" value="" />
+<input type="hidden" id="hidParticipantID" name="name" value="" />
+
+<script src="~/Scripts/jquery-3.5.1.min.js"></script>
+<link href="~/Content/sweetalert/sweet-alert.css" rel="stylesheet" />
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/jquery.blockUI.js"></script>
+<script src="~/Scripts/toast.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+    $(function () {
+        $('#lblParticipant').text('@HttpContext.Current.Session["Name"]');
+        //$("#ddlSubject").select2();
+
+        $(".btnQues").click(function () {
+            $("input[name='Option']").prop('checked', false);
+            var QuestionID = $(this).attr('value');
+            var ID = $(this).attr('id');
+            //Enable/Disable previous & next buttons on click any button
+            if (ID == "btnQuestion1") {
+                $('#btnPrevious').attr('disabled', 'disabled');
+            } else {
+                $('#btnPrevious').removeAttr('disabled');
+            }
+
+            if (ID == "btnQuestion10") {
+                $('#btnNext').attr('disabled', 'disabled');
+            } else {
+                $('#btnNext').removeAttr('disabled');
+            }
+
+            $(".btnQues").removeClass("active");
+            //$(".btnQues:not('#btnQuestion" + NextID + "')").removeClass("active");
+            $('#' + ID + '').addClass("active");
+            //$(this).removeClass("saved").addClass("active");
+            //$(".btnQues:not('#"+ID+"')").removeClass("active");
+
+            // $(obj).closest('tr').attr('indx')
+            btnStartExam(QuestionID);
+        });
+        fnBindSubjects();
+    });
+
+    function fnNext() {
+
+        var id = $(".active").attr('id').slice(-1);
+        var NextID = parseInt(id) + 1;
+        if (NextID == "10") {
+            $('#btnNext').attr('disabled', 'disabled');
+        } else {
+            $('#btnPrevious,#btnNext').removeAttr('disabled');
+        }
+        var NextQues = $("#btnQuestion" + NextID + "").attr('value');
+        $(".btnQues").removeClass("active");
+        //$(".btnQues:not('#btnQuestion" + NextID + "')").removeClass("active");
+        $("#btnQuestion" + NextID + "").addClass("active");
+        btnStartExam(NextQues);
+    }
+
+    function fnPrevious() {
+
+        var id = $(".active").attr('id').slice(-1);
+        if (id == "0") { id = "10" }
+        var PrevID = parseInt(id) - 1;
+        if (PrevID == "1") {
+            $('#btnPrevious').attr('disabled', 'disabled');
+        } else {
+            $('#btnPrevious,#btnNext').removeAttr('disabled');
+        }
+        var prevQues = $("#btnQuestion" + PrevID + "").attr('value');
+        $(".btnQues").removeClass("active");
+        $("#btnQuestion" + PrevID + "").addClass("active");
+        btnStartExam(prevQues);
+    }
+
+    function fnBindSubjects() {
+        $.post('/Admin/GetSubjectlist', function (data) {
+            var objSubject = data;
+            if (objSubject != "" && objSubject != undefined && objSubject.length > 0) {
+                $('#ddlSubject').find('option').remove();
+                $('#ddlSubject').append('<option value="0">----------Select Subject----------</option>');
+                var optionhtml = "";
+                $.each(objSubject, function (s) {
+                    optionhtml = '<option value="' + objSubject[s].SubjectID + '">' + objSubject[s].SubjectName + '</option>';
+                    $('#ddlSubject').append(optionhtml);
+                });
+            } else {
+                $('#ddlSubject').append('<option value="">--Select Subject--</option>');
+            }
+        });
+    }
+
+    function btnStartExam(QuestionID) {
+        if ($("#ddlSubject").val() == "0") {
+            $.toast({ heading: 'Choose a subject to start the Exam.', position: 'top-right', icon: 'error', hideAfter: 3000, stack: 6 });
+            return false;
+        }
+        if (QuestionID == undefined) {
+            $(".txtblinker").removeClass("hide");
+            $("#ddlSubject,#imgStat,.txtblinker").css("pointer-events", "none");
+
+            var fiveMinutes = 60 * 5,
+                display = $('#time');
+            startTimer(fiveMinutes, display);
+        }
+        debugger;
+        //ShowBlockUI('.wizard-content');
+        debugger;
+        $.post('/Student/GetQuestions', { QuesID: QuestionID, SubjectID: $("#ddlSubject").val() }, function (data) {
+            debugger;
+            if (data != undefined && data.length > 0) {
+                $("#lblQuestion").text(data[0].Question);
+                $("#lblQueNum").val(data[0].QuestionNum);
+                $("#lblOptionA").text(data[0].OptionA);
+                $("#lblOptionB").text(data[0].OptionB);
+                $("#lblOptionC").text(data[0].OptionC);
+                $("#lblOptionD").text(data[0].OptionD);
+                $("#hidQuestion").val(1);
+
+                if (QuestionID == undefined) {//check here
+                    $("#btnQuestion1").addClass('active');
+                    $('#btnPrevious').attr('disabled', 'disabled');
+                    $.each(data, function (i) {
+                        var j = i + 1;
+                        $("#btnQuestion" + j + "").val(data[i].QuestionNum);
+                    });
+                }
+            } else {
+                $("#lblQuestion").text('');
+                $("#lblOptionA").text('');
+                $("#lblOptionB").text('');
+                $("#lblOptionC").text('');
+                $("#lblOptionD").text('');
+                $("#hidQuestion").text('');
+            }
+            debugger;
+            //HideBlockUI('.wizard-content');
+        });
+
+    }
+
+    function fnSave() {
+
+        $(".active").addClass('saved');
+
+        //$(".btnQues").removeClass("active");
+
+        var formdata = {
+            Question: $("#lblQueNum").val(),
+            Option: $("input[name='Option']:checked").val()
+        }
+        $.post('/Student/SaveExamQuestion', formdata, function (data) {
+
+            if (data != undefined && data > 0) {
+                //$.toast({ heading: ''+data+'', position: 'top-right', icon: 'error', hideAfter: 3000, stack: 6 });
+                $("input[name='Option']").prop('checked', false);
+            }
+        });
+
+    }
+
+    function fnSubmitTest() {
+        debugger
+
+        var formdata = {
+            Question: $("#lblQueNum").val(),
+            Option: $("input[name='Option']:checked").val()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Student/SubmitTest",
+            data: formdata,
+            dataType: 'json',
+            success: function (data) {
+                debugger
+                fnReset();
+                console.log(data);
+            //if (data > 0) {
+            //    $.toast({ heading: 'Test submitted successfully.', position: 'top-right', icon: 'success', hideAfter: 6000, stack: 6 });
+            //}
+                swal("Congrats", "You scored "+data+" out of 10", "success");
+            }
+        });
+    }
+
+    function fnReset() {
+        $("#lblQuestion,#lblOptionA,#lblOptionB,#lblOptionC,#lblOptionD,#hidQuestion").text('');
+        $("input[name='Option']").val('0');
+        $("#hidQuestion").val();
+        $("#ddlSubject").val('0');
+        $("#ddlSubject,#imgStat,.txtblinker").css("pointer-events", "");
+        $('#time').text(00 + ":" + 00);
+        $(".txtblinker").addClass("hide");
+        $(".btnQues ").removeClass('active');
+        $(".btnQues ").removeClass('saved');
+    }
+
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10)
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.text(minutes + ":" + seconds);
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    //Function to block & unblock page
+    function ShowBlockUI(control) {
+        debugger;
+        $(control).blockUI({
+            message: '<img src="../Images/loading_blue.gif"  width="60" height="60" />',
+            css: { border: 'none', padding: '15px', backgroundColor: 'none' }
+        });
+    }
+
+    function HideBlockUI(control) {
+        debugger;
+        $(control).unblock();
+    }
+
+    // Function to print pdf
+    function fnPrintAll(print) {
+        //var id = $(print).attr('id');
+        //window.open("SMARTPrint?ID=" + id + "&ParticipantID=" + $("#hidparticipantid").val(), '_blank');
+        window.open("ResultPrint?ParticipantID=" + $("#hidParticipantID").val(), '_blank');
+    }
+
+    function fnDirectPrint() {
+        window.location = "DirectPrint";
+    }
+</script>

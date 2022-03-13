@@ -1,0 +1,479 @@
+﻿
+@{
+    ViewBag.Title = "User Management";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<style class="text/css">
+    .mdi-inbox-arrow-down{
+        color:#F66;
+    }
+    .form-control {
+        border: 1px solid #000;
+        border-radius: 0px;
+    }
+    .btn-group-sm > .btn, .btn-sm {
+        padding: 8px 16px;
+        font-size: 14px;
+        line-height: 1.5;
+        font-weight: 700;
+        border: 1px solid #000;
+        margin: 0 5px;
+    }
+    .srhPadd{
+        padding-top:10px;
+    }
+    #divAddTitle {
+        font-size: 20px;
+        line-height: 31px;
+        font-weight: 800;
+        color: darkslategray;
+    }
+    #divMain {
+        border: 1px solid lightslategray;
+        margin-bottom: 10px;
+    }
+    .searchHead {
+        background-color: aquamarine;
+        border-bottom: 1px solid #0A4;
+    }
+    #SearchDivBody {
+        height: 60px;
+    }
+    .m-r-10 {
+        margin-right: 10px;
+    }
+
+    h3 {
+        color: blue;
+        font-weight: bolder;
+    }
+
+    #btnAdd {
+        background-color: blue;
+        color: white;
+        font-weight: 700;
+        width: 14%;
+        font-size: large;
+        border-radius: 10px;
+    }
+
+    .pagination {
+        margin: 0 !important;
+    }
+
+    .clsacticon {
+        cursor: pointer;
+    }
+    /*design related to model*/
+    .modal-content {
+        width: 269px;
+        align-items: center;
+        margin-left: 31%;
+    }
+
+    .modal-header .close {
+        margin-top: -21px !important;
+    }
+
+    .modal-content {
+        border: 1px solid blue !important;
+        border-radius: 0px !important;
+    }
+
+    .modal {
+        top: -19px !important;
+    }
+</style>
+
+<h1>check repository</h1>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>User Management</h3>
+            <h5>@HttpContext.Current.Session["LoginID"]</h5>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" id="btnAdd" class="btn btn-primary pull-right" onclick="window.location = '../Home/CreateRegistry';">Add</button>
+            <div style="display:inline-block" class="pull-right m-r-10">
+                <a class="show-pop-large cursor-ptr " data-toggle="tooltip" data-placement="top" title="" data-original-title="Export to CSV file" onclick="fnExportDate()">
+                    <img src="/Images/Downloads.png" height="31" width="31" alt="Export to CSV file">
+                </a>
+            </div>
+        </div>
+        <div id="divProviderBlocked"></div>
+    </div>
+    @*<div class="icon-loader">
+            <img id="imgif" src="../Images/loading_blue.gif" />
+        </div>*@
+    <div id="divMain" class="card mrg10B mrg20T col-sm-12 col-xs-12 pad0A">
+        <div id="SearchDivHead" class="cursor-ptr clscollapsehead" title="Click to expand">
+            <div class="row">
+                <div class="col-md-12 searchHead">
+                    <div id="divAddTitle" class="control-label font-bold pull-left">
+                        Search
+                    </div>
+                    <div style="font-size:23px;" id="spSearchFilter" class="mdi mdi-inbox-arrow-up pull-right text-success pull-right"></div>
+                </div>
+            </div>
+        </div>
+        <div id="SearchDivBody" class="pad10A" style="display:none;">
+            <div class="row">
+                <div class="col-sm-12 srhPadd">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <select id="ddlUserTypes" class="form-control">
+                                <option value="0">---------User Type--------- </option>
+                                <option value="1">Admin</option>
+                                <option value="2">Staff</option>
+                                <option value="3">Student</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input type="text" name="name" value="" placeholder="Name" class="form-control" id="txtSrhName"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <input type="text" name="name" value="" placeholder="Address" class="form-control" id="txtSrhAddress"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <select id="ddlSrhGender" class="form-control">
+                                <option value="0">---------Gender--------- </option>
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                                <option value="3">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-bottom: 10px;">
+                            <div class="text-center">
+                                <button class="btn btn-sm" onclick="fnloadgrid();">Search</button>
+                                <button class="btn btn-sm" onclick="fnReset();">Reset</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table tblManageGrid" id="tblUserInfo">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="master"></th>
+                            <th>Name</th>
+                            <th style="width:18%">Address</th>
+                            <th>DOB/Age,Gender</th>
+                            <th>Email/Phno</th>
+                            <th>Picture</th>
+                            <th>LastModified Date/BY</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="7" class="text-danger text-center">No Record(s) Found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            @*gridfunction="fnloadgrid"*@
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-3">
+                        <div id="datatable-tabletools_length" class="dataTables_length">
+                            <label>
+                                <span class="font-normal">Records Per Page: </span>
+                                <select class="pagesize" gridfunction="fnloadgrid" onchange="fngridpage(this);" name="datatable-tabletools_length" aria-controls="datatable-tabletools">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                </select>
+
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="datatable-reorder_info" class="dataTables_info text-center">Showing 1 to 50 of 50 entries</div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div id="datatable-reorder_paginate" class="dataTables_paginate paging_bootstrap m-0 text-right">
+                            <ul class="pagination" gridfunction="fnloadgrid" id="pagination">
+                                <li class="previous disabled">
+                                    <a href="#">Previous</a>
+                                </li>
+                                <li class="next disabled">
+                                    <a href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container clsmodel">
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="Modeltitle">Are you sure to delete?</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="fndeletepopup();">Delete</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<input type="hidden" id="hidIDs" name="name" value="" />
+
+@*<script src="~/Scripts/jquery.blockUI.js"></script>*@
+<script class="text/javascript">
+    $(function () {
+        //$('#ddlSubjects').select2().trigger('change');
+        fnloadgrid();
+
+        $("#SearchDivHead").click(function (e) {
+            if (/div/i.test(e.target.tagName)) {
+                var iClass = $("#spSearchFilter").attr('class');
+                if (iClass.indexOf('mdi-inbox-arrow-up') > -1) {
+                    $("#SearchDivBody").slideToggle(function () {
+                        $("#SearchDivBody").show();
+                    });
+                    $("#spSearchFilter").removeClass("mdi-inbox-arrow-up").addClass("mdi-inbox-arrow-down");
+                    $("#SearchDivHead").attr("title", "Click to collapse");
+                } else {
+                    if (iClass.indexOf('mdi-inbox-arrow-down') > -1) {
+                        $("#SearchDivBody").slideToggle(function () {
+                            $("#SearchDivBody").hide();
+                        });
+                        $("#spSearchFilter").removeClass("mdi-inbox-arrow-down").addClass("mdi-inbox-arrow-up");
+                        $("#SearchDivHead").attr("title", "Click to expand");
+                    }
+                }
+            }
+        });
+
+        jQuery('#master').on('click', function (e) {
+            if ($(this).is(':checked', true)) {
+                $('input[type=checkbox]').each(function () { this.checked = true; });
+            }
+            else {
+                $('input[type=checkbox]').each(function () { this.checked = false; });
+            }
+        });
+    });
+
+    function fnloadgrid() {
+        try {
+
+            //ShowBlockUI(".wizard-content");
+            var formData = new FormData();
+            formData.append('PageSize', $('.pagesize option:selected').val());
+            formData.append('PageNo', CurPage);
+            formData.append('UserID', $('#ddlUserTypes').val());
+            formData.append('Gender', $('#ddlSrhGender').val());
+            formData.append('Name', $('#txtSrhName').val());
+            formData.append('Address', $('#txtSrhAddress').val());
+         
+            $.ajax({
+                type: "POST",
+                url: "/Admin/ManageUsers",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,               
+                success: function (data) {
+                    var objdata = data.userDetails;
+                    $("#tblUserInfo > tbody > tr").remove();
+                    if (objdata != undefined && objdata.length > 0) {
+
+                        //<img src="~/Images/RY_logimg.jpg" />
+                        $.each(objdata, function (o) {
+                            var trhtml = '<tr role="row" indx=' + objdata[o].ID + '>' +
+                                '<td><input id="mulsel" type="checkbox" value=' + objdata[o].ID + '></td><td>' + objdata[o].Name + '</td>' +
+                                '<td>' + '<table class="unstyle">' + '<tr>' + '<td>' + objdata[o].Address + '</td>' + '</tr>' + '<tr>' + '<td>' + objdata[o].State + "," + objdata[o].Country + '</td>' + '</tr>' + '</table>' + '</td>' +
+                                '<td>' + '<table class="unstyle">' + '<tr>' + '<td>' + objdata[o].DOB + '</td>' + '</tr>' + '<tr>' + '<td>' + objdata[o].Age + ", " + objdata[o].Gender + '</td>' + '</tr>' + '</table>' + '</td>' +
+                                '<td>' + '<table class="unstyle">' + '<tr>' + '<td>' + objdata[o].Email + '</td>' + '</tr>' + '<tr>' + '<td>' + objdata[o].PhoneNo + '</td>' + '</tr>' + '</table>' + '</td>' +
+                                '<td><img alt=' + objdata[o].Name + '  src="../Images/ParticipantImg/' + objdata[o].ID + '/' + objdata[o].Picture + '" height="100" width="90"/></td><td>' + objdata[o].LastModifiedDate + '</td>' +
+                                '<td class="text-nowrap" style="font-size: 23px;"><i class="mdi mdi-table-edit text-success m-r-10 cursor-ptr" onclick=\'fnEditSurvey("' + objdata[o].ID + '")\' Title=\"Edit\"></i>' +
+                                '<i class="mdi mdi-delete-sweep text-danger m-r-10 cursor-ptr"  data-toggle="modal" data-target="#myModal" onclick=\"fndeleteclick(this)\" Title=\"Delete\"></i></td>'
+                                + '</tr>';
+
+                            $('#tblUserInfo > tbody').append(trhtml);
+
+                            if (o == objdata.length - 1) {
+                                var firstIndex = objdata[0].RowNum;
+                                TotalRows = objdata[o].RowCnt;
+                                PageSize = $('.pagesize option:selected').val();
+                                $('.dataTables_info').text('Showing ' + firstIndex + ' to ' + objdata[o].RowNum + ' of ' + objdata[o].RowCnt + ' entries');
+                            }
+                        });
+                    }
+                    else {
+                        TotalRows = 0;
+                        $('#tblUserInfo > tbody').append('<tr><td colspan="6" class="text-center text-danger">No record(s) found</td></tr>');
+                    }
+                    fnBindPageEvents("fnloadgrid", "pagination");
+                    //$("#divProviderBlocked").unblock();
+                },
+                error: function () {
+                    //$("#divProviderBlocked").unblock();
+                }
+        
+            });
+        }
+        catch (ex) { }
+    }
+
+    //Function to click grid delete button
+    function fndeleteclick(del) {
+        if ($("input[type=checkbox]:checked").length > 0) {
+            var multiiplesel = [];
+            $.each($("input[type=checkbox]:checked"), function () {
+                multiiplesel.push($(this).val());
+            });
+            $("#divSurveydelete").modal("show");
+            $("#divSurveydelete").attr("delid", multiiplesel);
+            $("#hidIDs").val(multiiplesel);
+        } else {
+            var id = $(del).closest('tr').attr('indx');
+            $("#divSurveydelete").modal("show");
+            //$("#divSurveydelete").attr("delid", id);
+            $("#hidIDs").val(id);
+        }
+    }
+    function fndeletepopup() {
+        //ShowBlockUI(".wizard-content");
+        try {
+
+            var id = [];
+            id = $("#hidIDs").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/DeleteUserInfo",
+                data: { ID: id },
+                success: function (data) {
+                    if (data == 'yes') {
+                        CurPage = 1; numclick = 0;
+                        $.toast({
+                            heading: 'User Info deleted successfully.',
+                            position: 'top-right',
+                            //loaderBg: '#ff6849',
+                            icon: 'error',
+                            hideAfter: 3000
+                            //stack: 6
+                        });
+                        OrderBy = "";
+                    }
+                    $("#divSurveydelete").modal("hide");
+                    //$('.clsmodel').hide();
+                    //HideBlockUI('.wizard-content');
+                    fnloadgrid();
+                }
+            });
+        }
+        catch (ex) { }
+    }
+
+    function fnReset() {
+        $('#ddlUserTypes,#ddlSrhGender').val(0);
+        $('#txtSrhName,#txtSrhAddress').val('');
+        $('.pagesize').val(5);
+        fnloadgrid();
+    }
+
+    //function to Export Members data to CSV file
+    function fnExportDate() {
+        var param = 'AllUsers=' + 'Yes'
+        window.open('ExportUsersDetailToCSV?' + param, '_blank');
+    }
+                    //function fnExportDate() {
+
+                    //    var htmstr = '<div class="progress"><div class="progress-bar bg-info active progress-bar-striped" role="progressbar" style="width:1%; height:20px;"><span class="sr-only">0% Complete</span></div></div></div>';
+
+                    //    $('.wizard-content').block({
+                    //        message: htmstr,
+                    //        css: { border: 'none', padding: '15px', backgroundColor: 'none' }
+                    //    });
+                    //    var param = 'AllUsers=' + 'Yes'
+
+                    //    $.ajax({
+                    //        type: "GET",
+                    //        contentType: "application/json; charset=utf-8",
+                    //        url: "/Admin/ExportUsersDetailToCSV",
+                    //        data: param,
+                    //        xhr: function () {
+                    //            var myXhr = $.ajaxSettings.xhr();
+                    //            if (myXhr.upload) {
+                    //                progressCnt = 0;
+                    //                progressHandlingFunction();
+                    //            }
+                    //            return myXhr;
+                    //        },
+                    //        success: function (response) {
+                    //            if (response.indexOf("Name") != -1 && response.indexOf("ID") != -1 && response.indexOf("!DOCTYPE html") == -1) {
+                    //                var blob = new Blob([response], { type: 'application/ms-excel' });
+                    //                var downloadUrl = URL.createObjectURL(blob);
+                    //                var a = document.createElement("a");
+                    //                a.remove();
+                    //                a.href = downloadUrl;
+                    //                a.download = "Users Report" + ".csv";
+                    //                document.body.appendChild(a);
+                    //                a.click();
+                    //                clearInterval(progressBar);
+                    //                $('.progress-bar').css({ 'width': 100 + '%', 'height': '20px;' });
+                    //                setTimeout(function () { $('.wizard-content').unblock(); }, 500)
+                    //            } else {
+                    //                swal("Warning", "No Records", "warning");
+                    //                clearInterval(progressBar);
+                    //                $('.progress-bar').css({ 'width': 100 + '%', 'height': '20px;' });
+                    //                setTimeout(function () { $('.wizard-content').unblock(); }, 500)
+                    //            }
+                    //        },
+                    //        complete: function () {
+                    //            clearInterval(progressBar);
+                    //            $('.progress-bar').css({ 'width': 100 + '%', 'height': '20px;' });
+                    //            setTimeout(function () { $('.wizard-content').unblock(); }, 500)
+
+                    //        }
+                    //    });
+                    //}
+                    //var progressCnt = 0;
+                    //var progressBar;
+                    ////show progress bar
+                    //function progressHandlingFunction() {
+                    //    progressBar = setInterval(function () {
+                    //        if (progressCnt == 100) {
+                    //            progressCnt = 0;
+                    //            $('.progress-bar').css({ 'width': 0 + '%', 'height': '20px;' });
+                    //        }
+                    //        else {
+                    //            progressCnt++;
+                    //            $('.progress-bar').css({ 'width': progressCnt + '%', 'height': '20px;' });
+                    //        }
+                    //    }, 300);
+                    //}
+</script>

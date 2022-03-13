@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewBag.Title = "Tile Page";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+
+<style>
+    /*    .lgout {
+        text-align: center;
+        font-size: 15px;
+        border: 5px solid cornflowerblue;
+        border-radius: 16px;
+        background-color: blanchedalmond;
+        color: black;
+        font-weight: bold !important;
+    }*/
+</style>
+
+<div class="container">
+    <div class="row">
+        @*<div class="col-sm-12">
+                <input type="button" id="block" value="Block" />
+                <input type="button" id="unblock" value="Unblock" />
+                <input type="button" id="auto" value="Auto block Unblock" />
+                <br />
+                <br />
+                <div style="height:300px;width:400px;border:1px solid black;padding:10px;" class="test">
+                    <p>
+                        <h1>ImInfo.in</h1>
+                        <hr />
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+                    <p>
+                </div>
+
+            </div>*@
+        <div class="col-sm-12">
+            <h2>Dropdowns</h2>
+            <p>Add the .dropdown-menu-right class to .dropdown-menu to right-align the dropdown menu:</p>
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                    Dropdown Example
+                    <span class="caret"></span>
+                </button>
+                <a class="btn btn-default dropdown-toggle" id="alogout" href="" data-toggle="dropdown" data-placement="bottom" data-original-title="Logout" aria-haspopup="true" aria-expanded="false">
+                    LogOut<i class="mdi mdi-power"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-6">
+                                    <a href="~/Admin/AddStaff">
+                                        <img src="~/Images/ParticipantImg/2/Logo.png" height="100" width="100" />
+                                    </a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label>@HttpContext.Current.Session["Name"]</label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li class="lgout"><a href="#" id="alog">Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.5.1.min.js"></script>
+<script src="~/Scripts/bootstrap.bundle.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery.blockUI.js"></script>
+<script>
+    $(function () {
+
+        $('#block').click(function () {
+            $('div.test').block({
+                message: 'Please wait...'
+            });
+        });
+
+        $('#unblock').click(function () {
+            $('div.test').unblock();
+        });
+
+        $('#auto').click(function () {
+            $('div.test').block({
+                message: 'Unblocking in 2 seconds...'
+            });
+            window.setTimeout("$('div.test').unblock()", 2000);
+        });
+    });
+
+</script>
+

@@ -1,0 +1,431 @@
+﻿
+@{
+    ViewBag.Title = "Add Subjects";
+    Layout = "~/Views/Shared/_MyLayout.cshtml";
+}
+<link href="~/Content/toast.css" rel="stylesheet" />
+<link href="~/Content/css/select2.min.css" rel="stylesheet" />
+<style>
+    .m-l-5 {
+        margin-left: 15px;
+        margin-bottom: 4px;
+    }
+
+    .close {
+        font-size: 35px;
+    }
+
+    .modal-header {
+        background-color: lightgray;
+        color: purple;
+        font-variant-caps: all-petite-caps;
+    }
+</style>
+
+<div><h1>Subjects Page</h1></div>
+
+<div class="row container-fluid">
+    <div class="col-sm-6">
+        <button type="button" class="btn btn-primary m-l-5" data-toggle="modal" data-target="#exampleModal">
+            Add Subject
+        </button>
+
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table tblManageGrid tblSubjects">
+                    <thead>
+                        <tr>
+                            <th>SlNo</th>
+                            <th>Subject ID</th>
+                            <th>Subject Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-3">
+                        <div id="datatable-tabletools_length" class="dataTables_length">
+                            <label>
+                                <span class="font-normal">Records Per Page: </span>
+                                <select class="pagesize" gridfunction="fnSubjectGrid" onchange="fngridpage(this);" name="datatable-tabletools_length" aria-controls="datatable-tabletools">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="datatable-reorder_info" class="dataTables_Sub text-center">Showing 1 to 10 of 50 entries</div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div id="datatable-reorder_paginate" class="dataTables_paginate paging_bootstrap m-0 text-right">
+                            <ul class="pagination" gridfunction="fnSubjectGrid" id="pagination">
+                                <li class="previous disabled">
+                                    <a href="#">Previous</a>
+                                </li>
+                                <li class="next disabled">
+                                    <a href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <button type="button" class="btn btn-primary m-l-5" id="AssignStaff" data-toggle="modal" data-target="#StaffModal">
+            Assign Subject
+        </button>
+
+        <div class="col-sm-12">
+            <div class="table-responsive">
+                <table class="table tblManageGrid tblStaffWithSub">
+                    <thead>
+                        <tr>
+                            <th>SlNo</th>
+                            <th>Staff Name</th>
+                            <th>Assigned Subjects</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-3">
+                        <div id="datatable-tabletools_length" class="dataTables_length">
+                            <label>
+                                <span class="font-normal">Records Per Page: </span>
+                                <select class="pagesize" gridfunction="fnStaffWithSubGrid" onchange="fngridpage(this);" name="datatable-tabletools_length" aria-controls="datatable-tabletools">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div id="datatable-reorder_info" class="dataTables_info text-center">Showing 1 to 10 of 50 entries</div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div id="datatable-reorder_paginate" class="dataTables_paginate paging_bootstrap m-0 text-right">
+                            <ul class="pagination" gridfunction="fnStaffWithSubGrid" id="pagination">
+                                <li class="previous disabled">
+                                    <a href="#">Previous</a>
+                                </li>
+                                <li class="next disabled">
+                                    <a href="#">Next</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Subject-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" @*aria-hidden="true"*@>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h3 class="modal-title" id="exampleModalLabel">Add Subjects</h3>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="form-group">
+                        <label>Subject ID</label>
+                        <input class="form-control" type="text" name="SubjectID" value="" id="txtSubID" />
+                    </div>
+                    <div class="form-group">
+                        <label>Subject Name</label>
+                        <input class="form-control" type="text" name="SubjectName" value="" id="txtSubName" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="fnSaveSubject();">Save</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Staff-->
+<div class="modal fade" id="StaffModal" tabindex="-1" role="dialog" aria-labelledby="staffModalLabel" @*aria-hidden="true"*@>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <h3 class="modal-title" id="staffModalLabel">Assign Subject(s) to Staff</h3>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="">
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>Choose Staff</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @*<input class="form-control" type="text" name="StaffName" value="" id="txtStaffID" />*@
+                            <select id="txtStaffID" class="form-control">
+                                <option value="">Choose Staff</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-3">
+                            <label>Choose Subject</label>
+                        </div>
+                        <div class="col-sm-9">
+                            @*<input class="form-control" type="text" name="AssignSubject" value="" id="txtAssignSub" />*@
+                            <select id="txtAssignSub" class="form-control" >
+                                <option value="">Choose Subject(s)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="fnAssignSubject();">Assign</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-3.5.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/select2.min.js"></script>
+<script src="~/Scripts/toast.js"></script>
+<script type="text/javascript">
+    $(function () {
+        fnSubjectGrid();
+        fnStaffWithSubGrid();
+        //$("#AssignStaff,#txtAssignSub").select2({});
+
+        $('#AssignStaff').on('click', function () {
+            fnBindStaff();
+            fnBindSubjects();
+        });
+
+        //BInding from single funcion
+       // $('#AssignStaff').on('click', function () {
+            //$.post('/Admin/GetStaffSubject', function (data) {
+            //    $.each(data, function (i, ssinfo) { 
+            //        var objStaff = ssinfo.stafflist;                    
+                
+            //    if (objStaff != "" && objStaff != undefined && objStaff.length > 0) {
+            //        $('#txtStaffID').find('option').remove();
+            //        var optionhtml = "";
+            //        $.each(objStaff, function (s) {
+            //            optionhtml = '<option value="' + objStaff[s].ID + '">' + objStaff[s].Name + '</option>';
+            //            $('#txtStaffID').append(optionhtml);
+            //        });
+            //    } else {
+            //        $('#txtStaffID').append('<option value="">--Select Staff--</option>');
+            //        }
+                                        
+            //        var objSubject = ssinfo.subjectlist;
+            //        if (objSubject != "" && objSubject != undefined && objSubject.length > 0) {
+            //            $('#txtAssignSub').find('option').remove();
+            //            var optionhtml = "";
+            //            $.each(objSubject, function (s) {
+            //                optionhtml = '<option value="' + objSubject[s].SubjectID + '">' + objSubject[s].SubjectName + '</option>';
+            //                $('#txtAssignSub').append(optionhtml);
+            //            });
+            //        } else {
+            //            $('#txtAssignSub').append('<option value="">--Select Subject--</option>');
+            //        }
+            //    });
+            //});
+
+       // });
+    });
+
+    function fnBindStaff() {
+        $.post('/Admin/GetStafflist', function (data) {
+            
+            var objStaff = data;
+
+            if (objStaff != "" && objStaff != undefined && objStaff.length > 0) {
+                $('#txtStaffID').find('option').remove();
+                $('#txtStaffID').append('<option value="">--Select Staff--</option>');
+                var optionhtml = "";
+                $.each(objStaff, function (s) {
+                    optionhtml = '<option value="' + objStaff[s].ID + '">' + objStaff[s].Name + '</option>';
+                    $('#txtStaffID').append(optionhtml);
+                });
+            } else {
+                $('#txtStaffID').append('<option value="">--Select Staff--</option>');
+            }
+        });
+    }
+
+    function fnBindSubjects() {
+        $.post('/Admin/GetSubjectlist', function (data) {
+            
+            var objSubject = data;
+            if (objSubject != "" && objSubject != undefined && objSubject.length > 0) {
+                $('#txtAssignSub').find('option').remove();
+                $('#txtAssignSub').append('<option value="">--Select Subject--</option>');
+                var optionhtml = "";
+                $.each(objSubject, function (s) {
+                    optionhtml = '<option value="' + objSubject[s].SubjectID + '">' + objSubject[s].SubjectName + '</option>';
+                    $('#txtAssignSub').append(optionhtml);
+                });
+            } else {
+                $('#txtAssignSub').append('<option value="">--Select Subject--</option>');
+            }
+        });
+    }
+
+    function fnSaveSubject() {
+        var formdata = {
+            SubID: $('#txtSubID').val(),
+            SubName: $('#txtSubName').val()
+        }
+        $.post('/Admin/SaveSubject', formdata, function (data) {
+            var obj = data;
+            if (obj > 0) {
+                $.toast({ heading: 'Subject added Successfully', position: 'top-right', icon: 'success', hideAfter: 3000 });
+                debugger
+                $('#exampleModal').hide();
+                fnSubjectGrid();
+            }
+        });
+    }
+
+    function fnSubjectGrid() {
+        debugger
+        $.post('/Admin/GetSubjects', { PageSize: $('.pagesize option:selected').val(), pageno: CurPage }, function (data) {
+            var SubObjects = data.subjectLists;
+            debugger
+            $(".tblSubjects >tbody > tr").remove();
+            if (SubObjects != "" && SubObjects.length > 0 && SubObjects != undefined) {
+                $.each(SubObjects, function (e) {
+                    var trhtml = '<tr role="row" indx=' + SubObjects[e].ID + '>' +
+                        '<td>' + SubObjects[e].RowNum + '</td>' +
+                        '<td>' + SubObjects[e].SubjectCode + '</td>' +
+                        '<td>' + SubObjects[e].SubName + '</td>' +
+                        '<td class="text-nowrap" style="font-size: 23px;"><i class="mdi mdi-table-edit clsacticon text-success m-r-10 cursor-ptr" onclick=\'fnEditSurvey("' + SubObjects[e].ID + '")\' Title=\"Edit\"></i>' +
+                        '<i class="mdi mdi-delete-sweep clsacticon text-danger m-r-10 cursor-ptr"  data-toggle="modal" data-target="#myModal" onclick=\"fndeleteclick(this)\" Title=\"Delete\"></i></td>'
+                        + '</tr >';
+                    $(".tblSubjects > tbody").append(trhtml);
+
+                    if (e == SubObjects.length - 1) {
+                        var firstIndex = SubObjects[0].RowNum;
+                        TotalRows = SubObjects[e].RowCnt;
+                        PageSize = $('.pagesize option:selected').val();
+                        $('.dataTables_Sub').text('Showing ' + firstIndex + ' to ' + SubObjects[e].RowNum + ' of ' + SubObjects[e].RowCnt + ' entries');
+                    }
+                });
+                fnBindPageEvents("fnSubjectGrid", "pagination");
+            } else {
+                TotalRows = 0;
+                $('.tblSubjects > tbody').append('<tr><td colspan="6" class="text-center text-danger">No record(s) found</td></tr>');
+            }
+        });
+    }
+
+    function fnAssignSubject() {
+        var formdata = {
+            Staff: $('#txtStaffID').val(),
+            Subject: $('#txtAssignSub').val()         
+        }
+        $.post('/Admin/AssignSubject', formdata, function (data) {
+            var obj = data;
+            
+        if (obj > 0) {
+            $.toast({ heading: 'Subject assigned Successfully', position: 'top-right', icon: 'success', hideAfter: 3000 });
+            //$('#exampleModal').prop('display', 'none');
+            fnStaffWithSubGrid();
+        }
+        });
+        //var formdata = {
+        //    Staff: $('#txtStaffID').val(),
+        //    Subject: $('#txtAssignSub').val()         
+        //}
+        //
+        ////$.post('/Admin/AssignSubject', { formdata }, function (data) {
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Admin/AssignSubject",
+        //        cache: false,
+        //        contentType: false,
+        //        processData: false,
+        //        data: formdata,
+        //        success: function (data) {
+        //            var obj = data;
+        //            
+        //            if (obj > 0) {
+        //                $.toast({ heading: 'Subject assigned Successfully', position: 'top-right', icon: 'success', hideAfter: 3000 });
+        //                //$('#exampleModal').prop('display', 'none');
+        //                fnSubjectGrid();
+        //            }
+        //        }
+        //});
+    }
+
+    function fnStaffWithSubGrid() {
+        $.post('/Admin/GetStaffwithSubject', { PageSize, pageno: CurPage }, function (data) {
+            var SWSObjects = data.staffwithSubLists;
+            $(".tblStaffWithSub >tbody > tr").remove();
+            if (SWSObjects != "" && SWSObjects.length > 0 && SWSObjects != undefined) {
+                $.each(SWSObjects, function (e) {
+                    var trhtml = '<tr role="row" indx=' + SWSObjects[e].ID + '>' +
+                        '<td>' + SWSObjects[e].RowNum + '</td>' +
+                        '<td>' + SWSObjects[e].StaffName + '</td>' +
+                        '<td>' + SWSObjects[e].SubName + '</td>' +
+                        '<td class="text-nowrap" style="font-size: 23px;"><i class="mdi mdi-table-edit clsacticon text-success m-r-10 cursor-ptr" onclick=\'fnEditSurvey("' + SWSObjects[e].ID + '")\' Title=\"Edit\"></i>' +
+                        '<i class="mdi mdi-delete-sweep clsacticon text-danger m-r-10 cursor-ptr"  data-toggle="modal" data-target="#myModal" onclick=\"fndeleteclick(this)\" Title=\"Delete\"></i></td>'
+                        + '</tr >';
+                    $(".tblStaffWithSub > tbody").append(trhtml);
+
+                    if (e == SWSObjects.length - 1) {
+                        var firstIndex = SWSObjects[0].RowNum;
+                        TotalRows = SWSObjects[e].RowCnt;
+                        PageSize = $('.pagesize option:selected').val();
+                        $('.dataTables_info').text('Showing ' + firstIndex + ' to ' + SWSObjects[e].RowNum + ' of ' + SWSObjects[e].RowCnt + ' entries');
+                    }
+                });
+                fnBindPageEvents("fnStaffWithSubGrid", "pagination");
+            } else {
+                TotalRows = 0;
+                $('.tblStaffWithSub > tbody').append('<tr><td colspan="6" class="text-center text-danger">No record(s) found</td></tr>');
+            }
+        });
+    }
+
+</script>

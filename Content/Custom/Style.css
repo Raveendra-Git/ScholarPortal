@@ -1,0 +1,60 @@
+﻿/*Table Header design*/
+thead {
+    background-color: goldenrod;
+    color: white;
+    font-weight: 600;
+}
+.cursor-ptr {
+    cursor: pointer;
+}
+
+.pagination {
+    margin: 0 !important;
+}
+
+/*custom styles*/
+div.error .controls input.form-control {
+    border: 1px solid red;
+}
+.help-block {
+    background: #ff00009c;
+    color: white;
+    margin-top: 1px;
+}
+div.help-block ul li {
+    list-style-type: none;
+    margin-left: -1em;
+}
+div.error .controls {
+    height: 60px;
+}
+
+/*Datepicker*/
+.datepicker-dropdown {
+    width: 20%
+}
+
+    .datepicker-dropdown div {
+        width: 64%;
+    }
+
+table.table-condensed {
+    width: 156%;
+    border-collapse: unset;
+}
+
+/*select 2*/
+.select2-container--default .select2-selection--single {
+    background-color: #fff;
+    border: 1px solid #aaa;
+    border-radius: 0px;
+    font-size:15px;
+}
+.select2-container .select2-selection--single {
+    height: 37px;
+}
+
+.select2-search__field:focus-visible {
+    border: 1px solid red;
+    border-radius: 0 !important;
+}

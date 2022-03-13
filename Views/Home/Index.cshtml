@@ -1,0 +1,151 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="~/Images/favicon.png" />
+    <title>Scholar Portal</title>
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/toast.css" rel="stylesheet" />
+    <style type="text/css">
+        div.col-sm-3 {
+            border: 1px solid gray;
+            border-top-left-radius: 28px;
+            background: white;
+            color: black;
+        }
+
+        .clsborder {
+            border: 5px solid white;
+            margin-top: 9%;
+            border-bottom-right-radius: 15px;
+            border-top-left-radius: 45px;
+            box-shadow: 0 4px 18px #ffffff;
+        }
+
+        .clstabs {
+            text-align: center;
+        }
+
+        body {
+            background-color: #D3E !important
+        }
+
+        #txtblinker {
+            animation: blinker 1s linear infinite;
+            font-family: "Times New Roman", Times, serif;
+            color: white;
+        }
+
+            #txtblinker:hover {
+                animation: paused;
+            }
+
+        @@keyframes blinker {
+            50% {
+                opacity: 0;
+                color: blue;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <form id="form-login" action="/" method="post">
+        <div class="container-fluid">
+            <div class="row control-group">
+                <div class="col-sm-4 col-md-4 col-lg-4"></div>
+                <div class="col-sm-4 col-md-4 col-lg-4 clsborder">
+                    <div class="col-sm-12 form-group controls">
+                        <label for="username">User ID : </label>
+                        <input type="text" class="form-control" id="txtUserID" name="name" value="" data-validation-required-message="User ID Required" required />
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="col-sm-12 form-group controls">
+                        <label for="password">Password : </label>
+                        <input type="password" name="Password" value="" id="txtPassword" class="form-control" data-validation-required-message="Password Required" required />
+                        <div class="help-block"></div>
+                    </div>
+                    <div class="col-sm-12 form-group">
+                        <input class="form-control btn btn-success" type="submit" name="login" value="Login" />
+                    </div>
+                    <div class="col-sm-12 form-group text-center">
+                        <label><a id="txtblinker" href="#" onclick="fnRegisterlink();">Not Registed? Create an Account</a></label>
+                    </div>
+                    <div class="row clstabs">
+                        <div class="col-sm-3 btn"><a href="https://www.w3schools.com/bootstrap/trybs_theme_band_full.htm">The Brand</a></div>
+                        <div class="col-sm-3 btn"><a href="https://www.w3schools.com/bootstrap/trybs_theme_company_full.htm">Company</a></div>
+                        <div class="col-sm-3 btn"><a href="https://www.w3schools.com/bootstrap/trybs_theme_me_complete.htm">Simple me</a></div>
+                        <div class="col-sm-3 btn"><a href="https://www.w3schools.com/bootstrap/bootstrap_templates.asp">Layout</a></div>
+                    </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4"></div>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jqBootstrapValidation.js"></script>
+<script src="~/Scripts/toast.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#form-login").find("input,textarea,select").jqBootstrapValidation({
+            preventSubmit: true,
+            submitError: function ($form, event, errors) {
+
+                alert('error');
+            },
+            submitSuccess: function ($form, event) {
+                event.preventDefault();
+                if ($('#txtUserID').val() == "") {
+                    $.toast({ heading: 'Enter UserID.', position: 'top-right', icon: 'error', hideAfter: 4000, stack: 6 });
+                } else if ($('#txtPassword').val() == "") {
+                    $.toast({ heading: 'Enter Password.', position: 'top-right', icon: 'error', hideAfter: 4000, stack: 6 });
+                } else {
+                    fnlogin();
+                }
+            },
+            filter: function () {
+                return $(this).is(":visible");
+            }
+        });
+    });
+
+    function fnlogin() {
+
+        var formdata = {
+            UserID: $('#txtUserID').val(),
+            Password: $('#txtPassword').val()
+        }
+
+        $.post('/Home/Loginctr', formdata, function (data) {
+            debugger
+            if (data != null && data != "0" && data != "" && data != undefined) {
+                var objData = data.loginSession;
+                if (objData.UserType == 1) {
+                    window.location = "../Admin/Admin";
+                } else if (objData.UserType == 2) {
+                    window.location = "../Staff/AddQuestions";
+                } else if (objData.UserType == 3) {
+                    window.location = "../Student/ExamPortal";
+                } else {
+                    $.toast({ heading: "User ID or Password InCorrect", position: 'top-right', icon: 'error', hideAfter: 4000, stack: 6 });
+                }
+            }
+        });
+    }
+
+    function fnRegisterlink() {
+        window.location = "../Home/CreateRegistry";
+    }
+</script>

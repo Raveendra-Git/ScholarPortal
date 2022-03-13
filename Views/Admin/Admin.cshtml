@@ -1,0 +1,149 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" href="~/Images/favicon.png" />
+    <title>Admin</title>
+    <style class="text/css">
+        body {
+            background-color: #0F9;
+        }
+        .col-sm-3 {
+            display: inline-block;
+            margin: 5px;
+        }
+        img {
+            border-radius: 10px 10px 0 0;
+            margin: 10px;
+        }
+        .ImageBoxes {
+            width: 25%;
+            height: auto;
+            display: inline-block;
+            padding: 10px;
+        }
+        .container {
+            padding: 0px;
+            position: relative;
+            text-align: center;
+            color: white;
+        }
+        img {
+            vertical-align: middle;
+            border-style: none;
+            width :190px;
+            height :190px;
+        }
+        .bottom-left {
+            position: absolute;
+            bottom: 9px;
+            width: 96%;
+            background: #000000a9;
+            margin-left: 4px;
+        }
+        .LabelText {
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: .5rem;
+        }
+        a, area, button, [role="button"], input, label, select, summary, textarea {
+            touch-action: manipulation;
+        }
+    </style>
+</head>
+<body>
+    <div class="container"> 
+        <div class="row">
+            <div class="col-sm-12">
+                <form id="form-Admin" novalidate="novalidate" autocomplete="off">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Admin/ChangePassword"><img src="~/Images/ChangePassword.png" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Change Password </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Admin/AddStaff"><img src="~/Images/AddStaff.jpg" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">User Management</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Admin/AddSubjects"><img src="~/Images/AddSubjects.png" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Add Subjects</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Student/ExamPortal"><img src="~/Images/Exam.jpg" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Take Test</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Home/Register"><img src="~/Images/Register.png" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Register</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Staff/AddQuestions"><img title="" src="~/Images/AddQuestions.jpg" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Add Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Admin/TilePage"><img title="" src="~/Images/TilePage.jpg" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Tile page</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="/Admin/TrailANDError"><img title="" src="~/Images/TrailAndError.jpg" /></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Trail And Error</label>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-3">
+                            <div class="container cursor-ptr">
+                                <a href="#"><img src="~/Images/AddQuestions.jpg"></a>
+                                <div class="bottom-left">
+                                    <label class="LabelText">Robert </label>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
